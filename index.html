@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="bower_components/angularjs-slider/dist/rzslider.min.css" media="screen" title="no title" charset="utf-8">
+    <style media="screen">
+      body {
+        font-family: Helvetica, sans-serif;
+        padding: 20px;
+      }
+      .row {
+        margin: 10px 0;
+      }
+      .red {
+        background: #ffb6b6;
+      }
+      .orange {
+        background: #ffd09f;
+      }
+      .vert {
+        background: #deffbd;
+      }
+      .gold {
+        background: #ffa630;
+        color: #fff;
+      }
+    </style>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <!-- Script -->
+    <script src="bower_components/angularjs-slider/dist/rzslider.min.js" charset="utf-8"></script>
+    <script src="dist/js/app.min.js" charset="utf-8"></script>
+  </head>
+
+  <!-- Initialisation de mon app (module) -->
+  <body ng-app="myApp" ng-cloak>
+
+    <div ng-controller="myController" class="container">
+      <!-- <h3>{{ prenom }} {{ nom }}</h3> -->
+      <!-- Ng-model permet d'interagir avec des variables en scope -->
+      <div class="row">
+        <div class="col-md-6">
+          <form class="form-horizontal">
+            <div class="form-group">
+              <label for="nom" class="col-sm-4 control-label">Nom</label>
+              <div class="col-sm-8">
+                <input class="form-control" type="text" ng-model="nom" name="name">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="prenom" class="col-sm-4 control-label">Prénom</label>
+              <div class="col-sm-8">
+                 <input class="form-control" type="text" ng-model="prenom" name="prenom">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="salaire" class="col-sm-4 control-label">Salaire</label>
+              <div class="col-sm-8">
+                 <input class="form-control" type="text" ng-model="salaire" ng-class="classeSalaire" ng-keyup="changerClasseSalaire()" name="salaire" value="">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="imposition" class="col-sm-4 control-label">Imposition en %</label>
+              <div class="col-sm-8">
+                 <input class="form-control" type="text" ng-model="imposition"  ng-keyup="calculNet()" name="imposition">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-4 col-sm-8">
+                <a class="btn btn-default" ng-click="jumboVisible = !jumboVisible" role="button">En voir plus</a>
+                <a class="btn btn-default" ng-click="reformater()" role="button">Reformater</a>
+              </div>
+            </div>
+            <div class="form-group">
+               <div class="col-sm-offset-4 col-sm-8">
+                 <div class="checkbox">
+                   <label>
+                     <input type="checkbox" ng-model="francs"> Afficher en francs
+                   </label>
+                 </div>
+               </div>
+             </div>
+             <div class="form-group" ng-if="francs">
+               <label class="col-sm-4 control-label">Salaire en francs</label>
+               <div class="col-sm-8">
+                {{ salaireFr }} francs
+               </div>
+             </div>
+             <div class="form-group" ng-class="emailOk">
+               <label for="email" class="col-sm-4 control-label">Email</label>
+               <div class="col-sm-8">
+                 <input class="form-control" type="text" ng-model="email" ng-keyup="checkEmail()" name="email">
+               </div>
+             </div>
+             <div class="form-group">
+               <label for="taux" class="col-sm-4 control-label">Taux d'imposition</label>
+               <div class="col-sm-8">
+                 <select class="form-control" ng-model="taux" ng-change="imposition = taux">
+                  <!-- <option ng-value="imposition"> Imposition à {{ imposition }}%</option> -->
+                  <option value="10">Imposition à 10%</option>
+                  <option value="20">Imposition à 20%</option>
+                  <option value="30">Imposition à 30%</option>
+                  <option value="50">Imposition à 50%</option>
+                  <option value="75">Imposition à 75%</option>
+                </select>
+               </div>
+             </div>
+             <div class="form-group">
+               <div class="col-sm-offset-4 col-sm-8">
+                 <rzslider rz-slider-model="imposition" rz-slider-options="{floor: 0, ceil: 100, showTicks: true, ticksArray: [10, 20, 30, 50, 75]}"></rzslider>
+               </div>
+             </div>
+          </form>
+        </div>
+        <div class="col-md-6">
+          <div class="jumbotron" ng-show="jumboVisible">
+            <h1>{{ prenom }} {{ nom }}</h1>
+            <p>{{ salaire }}<span ng-if="salaireNet != ''"> - Net: {{ salaireNet }} €</span></p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="alert alert-success col-md-12" ng-if="salaire >= 1000000 && nom == 'Trump'">Je suis président</div>
+      </div>
+      <div class="row">
+        <div class="alert alert-danger col-md-12" ng-if="nom == prenom">Nom et prenom sont identiques</div>
+      </div>
+    </div>
+
+  </body>
+</html>
