@@ -169,7 +169,11 @@
         age: parseInt($scope.age),
         ville: $scope.ville,
         sexe: $scope.sexe,
-        img: $scope.img
+        img: $scope.img,
+        coord: {
+          lat: $scope.latitude,
+          long: $scope.longitude
+        }
 
       });
 
@@ -179,7 +183,8 @@
       $scope.ville = "";
       $scope.sexe = "";
       $scope.img = "";
-
+      $scope.latitude = "";
+      $scope.longitude = "";
 
     };
 
