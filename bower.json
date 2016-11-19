@@ -15,6 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "angularjs-slider": "^5.8.7"
+    "angularjs-slider": "^5.8.7",
+    "ngmap": "^1.17.8"
   }
 }

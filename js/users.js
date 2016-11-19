@@ -2,7 +2,7 @@
 
   "use strict";
 
-  angular.module('appUsers', ['rzModule'])
+  angular.module('appUsers', ['rzModule', 'ngMap'])
         .controller('UsersCtrl', UsersCtrl)
         .filter('onlyMajeur', function(){
           return function(input, bool){
@@ -159,6 +159,8 @@
         }
       }
     ];
+
+    // Google maps
 
     $scope.ajouterUser = function(){
 

@@ -18,6 +18,9 @@
       .small-img {
         width: 35px;
       }
+      ng-map {
+        height: 500px;
+      }
     </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -32,12 +35,25 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
     <script src="bower_components/angularjs-slider/dist/rzslider.min.js" charset="utf-8"></script>
+    <script src="bower_components/ngmap/build/scripts/ng-map.min.js"></script>
+    <script src="http://maps.google.com/maps/api/js?key=AIzaSyCo_9pouyNpmiYd5OZh43zLr-SflLEbYMk"></script>
     <script src="js/users.js" charset="utf-8"></script>
   </head>
   <body ng-app="appUsers">
     <section ng-controller="UsersCtrl" class="container">
       <div class="col-md-8">
-        <h3>Gestion des utilisateurs</h3>
+        <div class="row">
+          <div class="col-md-9">
+            <h3>Gestion des utilisateurs</h3>
+          </div>
+          <div class="col-md-3">
+            <h3>
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalGM">
+              Afficher la Google Map
+            </button>
+            </h3>
+          </div>
+        </div>
         <hr/>
         <table class="table">
           <tr>
@@ -146,6 +162,24 @@
           </div>
         </form>
       </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalGM" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Google Map</h4>
+          </div>
+          <div class="modal-body">
+            <ng-map zoom="3" center="[46.22, 2.21]">
+              <marker ng-repeat="user in users | onlyMajeur:showMajeurs | whatCity:citySelected | limitTo:nbrAffiches" position="{{ user.coord.lat }},{{ user.coord.long }}"></marker>
+            </ng-map>
+          </div>
+        </div>
+      </div>
+    </div>
     </section>
   </body>
 </html>
