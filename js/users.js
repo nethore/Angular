@@ -4,12 +4,14 @@
 
   angular.module('appUsers', ['rzModule', 'ngMap'])
         .controller('UsersCtrl', UsersCtrl)
+        .controller('UsersAdd', UsersAdd)
+        .controller('UsersFilter', UsersFilter)
         .filter('onlyMajeur', function(){
           return function(input, bool){
             var out = [];
             if(bool) {
               angular.forEach(input, function(user){
-                if(user.age >= 18){
+                if(user.age >= 35){
                   out.push(user);
                 }
               });
@@ -29,148 +31,73 @@
             } else { out = input; }
             return out;
           };
+        })
+        .factory('UsersMgmt', function($rootScope) {
+
+          return {
+            propagation: function(users) {
+              $rootScope.$broadcast('TransfertUsers', users);
+            },
+            propagationFiltres: function(nomModel, valeurModele) {
+              $rootScope.$broadcast(nomModel, valeurModele);
+            }
+          };
+
         });
 
-  function UsersCtrl($scope, $filter, $http){
+  function UsersCtrl($scope, $filter, $http, UsersMgmt){
 
     console.log("Scope Chargée");
 
-    $scope.citySelected = "all";
-    $scope.nbrAffiches = 15;
-    // $scope.users = [
-    //   {
-    //     nom: 'Ethore',
-    //     prenom: 'Nikolas',
-    //     age: 24,
-    //     ville: 'Lyon',
-    //     sexe: true,
-    //     img: 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/1/000/090/2cb/07256b2.jpg',
-    //     coord: {
-    //       lat: 45.954356,
-    //       long: 4.694858
-    //     }
-    //   },
-    //   {
-    //     nom: 'Beaufils',
-    //     prenom: 'Lucas',
-    //     age: 24,
-    //     ville: 'Paris',
-    //     sexe: true,
-    //     img: 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/1/000/090/2cb/07256b2.jpg',
-    //     coord: {
-    //       lat: 45.954356,
-    //       long: 4.694858
-    //     }
-    //   },
-    //   {
-    //     nom: 'Ethore',
-    //     prenom: 'Nicole',
-    //     age: 74,
-    //     ville: 'Pommiers',
-    //     sexe: false,
-    //     img: 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/1/000/090/2cb/07256b2.jpg',
-    //     coord: {
-    //       lat: 45.954356,
-    //       long: 4.694858
-    //     }
-    //   },
-    //   {
-    //     nom: 'Ethore',
-    //     prenom: 'Fabien',
-    //     age: 37,
-    //     ville: 'Lyon',
-    //     sexe: true,
-    //     img: 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/1/000/090/2cb/07256b2.jpg',
-    //     coord: {
-    //       lat: 45.954356,
-    //       long: 4.694858
-    //     }
-    //   },
-    //   {
-    //     nom: 'Biber',
-    //     prenom: 'Justine',
-    //     age: 15,
-    //     ville: 'Paris',
-    //     sexe: false,
-    //     img: 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/1/000/090/2cb/07256b2.jpg',
-    //     coord: {
-    //       lat: 45.954356,
-    //       long: 4.694858
-    //     }
-    //   },
-    //   {
-    //     nom: 'David',
-    //     prenom: 'John',
-    //     age: 17,
-    //     ville: 'Los Angeles',
-    //     sexe: true,
-    //     img: 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/1/000/090/2cb/07256b2.jpg',
-    //     coord: {
-    //       lat: 45.954356,
-    //       long: 4.694858
-    //     }
-    //   },
-    //   {
-    //     nom: 'Clavier',
-    //     prenom: 'Christian',
-    //     age: 65,
-    //     ville: 'Marseille',
-    //     sexe: true,
-    //     img: 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/1/000/090/2cb/07256b2.jpg',
-    //     coord: {
-    //       lat: 45.954356,
-    //       long: 4.694858
-    //     }
-    //   },
-    //   {
-    //     nom: 'Spears',
-    //     prenom: 'Britney',
-    //     age: 35,
-    //     ville: 'Los Angeles',
-    //     sexe: false,
-    //     img: 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/1/000/090/2cb/07256b2.jpg',
-    //     coord: {
-    //       lat: 45.954356,
-    //       long: 4.694858
-    //     }
-    //   },
-    //   {
-    //     nom: 'La Fripouille',
-    //     prenom: 'Jacquouille',
-    //     age: 33,
-    //     ville: 'Paris',
-    //     sexe: true,
-    //     img: 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/1/000/090/2cb/07256b2.jpg',
-    //     coord: {
-    //       lat: 45.954356,
-    //       long: 4.694858
-    //     }
-    //   },
-    //   {
-    //     nom: 'Beaufils',
-    //     prenom: 'Maureen',
-    //     age: 27,
-    //     ville: 'Marseille',
-    //     sexe: false,
-    //     img: 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/1/000/090/2cb/07256b2.jpg',
-    //     coord: {
-    //       lat: 45.954356,
-    //       long: 4.694858
-    //     }
-    //   }
-    // ];
+    $scope.orderList = 'prenom';
+    $scope.souligner = function(){
+
+    };
 
     $http.get("http://www.json-generator.com/api/json/get/cuvFHzZsSW?indent=2").
       success(function(data, status) {
+        console.log('JSON Gen : ', data);
       	$scope.users = data;
-      })
+      });
 
-    // Google maps
+    $scope.$on('TransfertUsers', function(event, data){
+      console.log('Push', data);
+      $scope.users.push(data);
+    });
+    $scope.$on('citySelected', function(event, data){
+      $scope.citySelected = data;
+    });
+    $scope.$on('showMajeurs', function(event, data){
+      $scope.showMajeurs = data;
+    });
+    $scope.$on('nbrAffiches', function(event, data){
+      $scope.nbrAffiches = data;
+    });
+    $scope.$on('triAge', function(event, data){
+      $scope.reverseTri = data;
+    });
+
+    $scope.supprUser = function(id){
+      $scope.users.splice(id, 1);
+    };
+
+  }
+
+  function UsersAdd($scope, $filter, UsersMgmt){
+
+    $scope.verifImg = function(){
+      var regex = /[\S]*(\.gif)$/i;
+      if(regex.test($scope.img)) {
+        $scope.classImgForm = "has-success";
+      }
+      else {
+        $scope.classImgForm = "has-error";
+      }
+    };
 
     $scope.ajouterUser = function(){
 
-      console.log("Formulaire envoyé");
-      $scope.users.push({
+      $scope.userAdded = {
         nom: $scope.nom,
         prenom: $scope.prenom,
         age: parseInt($scope.age),
@@ -181,8 +108,9 @@
           lat: $scope.latitude,
           long: $scope.longitude
         }
-
-      });
+      };
+      console.log($scope.userAdded);
+      UsersMgmt.propagation($scope.userAdded);
 
       $scope.nom = "";
       $scope.prenom = "";
@@ -195,32 +123,36 @@
 
     };
 
-    $scope.supprUser = function(id){
-      $scope.users.splice(id, 1);
-    };
+  }
+  function UsersFilter($scope, $filter, UsersMgmt){
 
-    $scope.verifImg = function(){
-      var regex = /[\S]*(\.gif)$/i;
-      if(regex.test($scope.img)) {
-        $scope.classImgForm = "has-success";
-      }
-      else {
-        $scope.classImgForm = "has-error";
-      }
-    };
+    $scope.citySelected = "all";
+    $scope.nbrAffiches = 10;
+    $scope.triAge = "down";
 
     $scope.triParAge = function() {
       console.log($scope.triAge);
-      $scope.varTri = "age";
       if ($scope.triAge == "down") {
         $scope.reverseTri = false;
       }
       else if ($scope.triAge == "up"){
         $scope.reverseTri = true;
       }
-      console.log($scope.users);
 
     };
+
+    $scope.$watch('citySelected', function(newValue, oldValue) {
+      UsersMgmt.propagationFiltres('citySelected', newValue);
+    });
+    $scope.$watch('showMajeurs', function(newValue, oldValue) {
+      UsersMgmt.propagationFiltres('showMajeurs', newValue);
+    });
+    $scope.$watch('nbrAffiches', function(newValue, oldValue) {
+      UsersMgmt.propagationFiltres('nbrAffiches', newValue);
+    });
+    $scope.$watch('triAge', function(newValue, oldValue) {
+      UsersMgmt.propagationFiltres('triAge', $scope.reverseTri);
+    });
 
   }
 

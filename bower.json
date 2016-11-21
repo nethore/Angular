@@ -16,6 +16,8 @@
   ],
   "dependencies": {
     "angularjs-slider": "^5.8.7",
-    "ngmap": "^1.17.8"
+    "ngmap": "^1.17.8",
+    "angular-route": "^1.5.8",
+    "angular-bootstrap-lightbox": "^0.12.0"
   }
 }
