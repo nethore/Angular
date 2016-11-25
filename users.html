@@ -195,7 +195,8 @@
             <td ng-if="!user.sexe">Femme</td>
             <td>{{ user.ville }}</td>
             <td>{{ user.age }}</td>
-            <td>{{ user.coord.lat }}</td>
+            <td
+            >{{ user.coord.lat }}</td>
             <td>{{ user.coord.long }}</td>
             <td><button type="button" class="btn btn-xs btn-danger" ng-click="supprUser(users.indexOf(user))"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
           </tr>
